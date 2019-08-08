@@ -1,0 +1,315 @@
+<?xml version='1.0'?>
+
+<robot name="car" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:include filename="$(find car_description)/urdf/mycar.gazebo"/>
+  <xacro:include filename="$(find car_description)/urdf/materials.xacro"/>
+  <xacro:include filename="$(find car_description)/urdf/macros.xacro"/>
+
+  <xacro:macro name="transmission_block" params="joint_name idx">
+      <transmission name="tran_${idx}">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="${joint_name}">
+          <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="motor__${idx}">
+          <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+          <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+      </transmission>
+  </xacro:macro>
+
+<!-- base link -->
+  <link name='base_link'>
+    <inertial>
+      <mass value="3.58774221136614"/>
+      <origin xyz="0.0 0.0 0.094077" rpy="0 0 1.570795" />
+      <inertia
+        ixx="0.183425135997034"
+        ixy="0.0126787219961619"
+        ixz="1.62647538577349E-07"
+        iyy="0.0252773163509939"
+        iyz="1.1753114452545E-06"
+        izz="0.175471420479131" />
+    </inertial>
+
+    <collision name='collision'>
+      <origin xyz="0 0 0.2" rpy="0 -1.570795 0"/>
+      <geometry>
+        <mesh filename="package://car_description/meshes/base_link.STL"/>
+      </geometry>
+    </collision>
+
+    <visual name='visual'>
+      <origin xyz="0 0 0.2" rpy="0 -1.570795 0"/>
+      <geometry>
+        <mesh filename="package://car_description/meshes/base_link.STL"/>
+      </geometry>
+      <material name="orange"/>
+    </visual>
+  </link>
+
+<!-- big pulley left -->
+  <joint name="big_pulley_left_joint" type="continuous">
+    <origin
+      xyz="-0.44203 0.165 0.06"
+      rpy="1.570795 0 1.570795"/>
+    <parent link="base_link"/>
+    <child link="big_pulley_left"/>
+    <axis xyz="1 0 0"/>
+    <safety_controller k_velocity="0"/>
+    <joint_properties damping="0.7" friction="0.0"/>
+  </joint>
+
+  <link name='big_pulley_left'>
+    <inertial>
+      <mass value="0.5"/>
+      <origin xyz="0 0 0" rpy="0 1.570795 0" />
+      <cylinder_inertia m="0.5" r="0.05" h="0.025"/>
+    </inertial>
+
+    <collision name='collision'>
+      <origin xyz="-0.025 0 0" rpy="0 3.14159 0"/>
+      <geometry>
+        <mesh filename="package://car_description/meshes/big_pulley_left.STL"/>
+      </geometry>
+    </collision>
+
+    <visual name='visual'>
+      <origin xyz="-0.025 0 0" rpy="0 3.14159 0"/>
+      <geometry>
+        <mesh filename="package://car_description/meshes/big_pulley_left.STL"/>
+      </geometry>
+      <material name="green"/>
+    </visual>
+  </link>
+
+<!-- big pulley right -->
+  <joint
+    name="big_pulley_right_joint"
+    type="continuous">
+    <origin
+      xyz="-0.44203 -0.165 0.06"
+      rpy="1.570795 0 1.570795"/>
+    <parent
+      link="base_link" />
+    <child
+      link="big_pulley_right" />
+    <axis
+      xyz="1 0 0" />
+    <safety_controller
+      k_velocity="0" />
+    <joint_properties damping="0.0" friction="0.0"/>
+  </joint>
+
+  <link
+    name="big_pulley_right">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 1.570795 0" />
+      <mass value="0.5" />
+      <cylinder_inertia m="0.5" r="0.05" h="0.025"/>
+    </inertial>
+    <visual>
+      <origin
+        xyz="0.025 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://car_description/meshes/big_pulley_right.STL" />
+      </geometry>
+      <material name="green"/>
+    </visual>
+    <collision>
+      <origin
+        xyz="0.025 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://car_description/meshes/big_pulley_right.STL" />
+      </geometry>
+    </collision>
+  </link>
+
+<!-- middlepulley left -->
+  <joint
+    name="middle_pulley_left_joint"
+    type="continuous">
+    <origin
+      xyz="0.161 0.163 0.045"
+      rpy="1.570795 0 1.570795"/>
+    <parent
+      link="base_link" />
+    <child
+      link="middle_pulley_left" />
+    <axis
+      xyz="1 0 0" />
+    <safety_controller
+      k_velocity="0" />
+  </joint>
+
+  <link name="middle_pulley_left">
+    <inertial>
+      <origin
+        xyz="0 0 0"
+        rpy="0 1.570795 0" />
+      <mass value="0.4" />
+      <cylinder_inertia m="0.4" r="0.033" h="0.025"/>
+    </inertial>
+    <visual>
+      <origin
+        xyz="-0.0125 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://car_description/meshes/middle_pulley_left.STL" />
+      </geometry>
+      <material name="blue"/>
+    </visual>
+    <collision>
+      <origin
+        xyz="-0.0125 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://car_description/meshes/middle_pulley_left.STL" />
+      </geometry>
+    </collision>
+  </link>
+
+<!-- middlepulley right -->
+  <joint name="middle_pulley_right_joint" type="continuous">
+    <origin
+      xyz="0.161 -0.163 0.045"
+      rpy="1.570795 0 1.570795" />
+    <parent link="base_link" />
+    <child link="middle_pulley_right" />
+    <axis xyz="1 0 0" />
+    <safety_controller
+      k_velocity="0" />
+  </joint>
+
+  <link name="middle_pulley_right">
+    <inertial>
+      <origin
+        xyz="0 0 0"
+        rpy="0 1.570795 0" />
+      <mass value="0.4" />
+      <cylinder_inertia m="0.4" r="0.033" h="0.025"/>
+    </inertial>
+    <visual>
+      <origin
+        xyz="0.0125 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://car_description/meshes/middle_pulley_right.STL" />
+      </geometry>
+      <material name="blue"/>
+    </visual>
+    <collision>
+      <origin
+        xyz="0.0125 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://car_description/meshes/middle_pulley_right.STL" />
+      </geometry>
+    </collision>
+  </link>
+
+<!-- frontpulley left -->
+  <joint
+    name="front_pulley_left_joint"
+    type="continuous">
+    <origin
+      xyz="0.419 0.163 0.2315"
+      rpy="1.570795 0 1.570795" />
+    <parent
+      link="base_link" />
+    <child
+      link="front_pulley_left" />
+    <axis xyz="1 0 0" />
+    <safety_controller
+      k_velocity="0" />
+  </joint>
+
+  <link
+    name="front_pulley_left">
+    <inertial>
+      <origin
+        xyz="0 0 0"
+        rpy="0 1.570795 0" />
+      <mass value="0.4" />
+      <cylinder_inertia m="0.4" r="0.033" h="0.025"/>
+    </inertial>
+    <visual>
+      <origin
+        xyz="-0.0125 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://car_description/meshes/front_pulley_left.STL" />
+      </geometry>
+      <material name="blue"/>
+    </visual>
+    <collision>
+      <origin
+        xyz="-0.0125 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://car_description/meshes/front_pulley_left.STL" />
+      </geometry>
+    </collision>
+  </link>
+
+<!-- frontpulley right -->
+  <joint
+    name="front_pulley_right_joint"
+    type="continuous">
+    <origin
+      xyz="0.419 -0.163 0.2315"
+      rpy="1.570795 0 1.570795" />
+    <parent
+      link="base_link" />
+    <child
+      link="front_pulley_right" />
+    <axis xyz="1 0 0" />
+    <safety_controller
+      k_velocity="0" />
+  </joint>
+
+  <link name="front_pulley_right">
+    <inertial>
+      <origin
+        xyz="0 0 0"
+        rpy="0 1.570795 0" />
+      <mass value="0.4" />
+      <cylinder_inertia m="0.4" r="0.033" h="0.025"/>
+    </inertial>
+    <visual>
+      <origin
+        xyz="0.0125 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://car_description/meshes/front_pulley_right.STL" />
+      </geometry>
+      <material name="blue"/>
+    </visual>
+    <collision>
+      <origin
+        xyz="0.0125 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://car_description/meshes/front_pulley_right.STL" />
+      </geometry>
+    </collision>
+  </link>
+
+  <xacro:transmission_block joint_name="big_pulley_left_joint" idx="1"/>
+  <xacro:transmission_block joint_name="big_pulley_right_joint" idx="2"/>
+
+</robot>
+
