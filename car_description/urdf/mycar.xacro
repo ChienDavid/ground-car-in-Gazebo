@@ -310,6 +310,10 @@
 
   <xacro:transmission_block joint_name="big_pulley_left_joint" idx="1"/>
   <xacro:transmission_block joint_name="big_pulley_right_joint" idx="2"/>
+  <xacro:transmission_block joint_name="middle_pulley_left_joint" idx="3"/>
+  <xacro:transmission_block joint_name="middle_pulley_right_joint" idx="4"/>
+  <xacro:transmission_block joint_name="front_pulley_left_joint" idx="5"/>
+  <xacro:transmission_block joint_name="front_pulley_right_joint" idx="6"/>
 
 </robot>
 
