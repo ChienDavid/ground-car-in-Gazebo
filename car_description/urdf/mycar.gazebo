@@ -10,12 +10,10 @@
       <rightFrontJoint>middle_pulley_right_joint</rightFrontJoint>
       <wheelSeparation>3.25</wheelSeparation>
       <wheelDiameter>0.6</wheelDiameter>
-      <torque>1</torque>
-      <broadcastTF>0</broadcastTF>
-      <commandTopic>cmd_vel</commandTopic>
-      <odometryTopic>odom</odometryTopic>
-      <odometryFrame>odom</odometryFrame>
       <robotBaseFrame>base_link</robotBaseFrame>
+      <torque>1</torque>
+      <commandTopic>cmd_vel</commandTopic>
+      <broadcastTF>0</broadcastTF>
     </plugin>
   </gazebo>
 
